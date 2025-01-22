@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         String fileName = intent.getStringExtra("fileName");
 
         /*try { */
+
             if (fileName != null) {
                 String textContent = readTextOrPdfFile(fileName);
                 String commonWordsContent = readTextFileFromAssets("commonWords.txt");
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    // Read text or PDF file from assets
     public String readTextOrPdfFile(String fileName) {
         if (fileName.toLowerCase().endsWith(".txt")) {
             return readTextFileFromAssets(fileName);
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Reads TXT files
     private String readTextFileFromAssets(String fileName) {
         AssetManager assetManager = getAssets();
         StringBuilder content = new StringBuilder();
@@ -154,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         return content.toString();
     }
 
+
+    //reads PDF files
     private String readPdfFileFromAssets(String fileName) {
         AssetManager assetManager = getAssets();
         StringBuilder content = new StringBuilder();
@@ -173,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //Text analysis
     private void analyzeText(String textContent, Set<String> commonWordSet) {
         // Normalize text
         textContent = textContent.toLowerCase().replaceAll("[^a-zA-Z0-9.\'\\s]", "");
@@ -187,9 +192,7 @@ public class MainActivity extends AppCompatActivity {
         int sentenceCount = sentences.length;
 
         // Unique words
-        Set<String> uniqueWords = Arrays.stream(words)
-                .filter(word -> !commonWordSet.contains(word))
-                .collect(Collectors.toSet());
+        Set<String> uniqueWords = Arrays.stream(words).filter(word -> !commonWordSet.contains(word)).collect(Collectors.toSet());
         int uniqueWordCount = uniqueWords.size();
 
         // Word frequencies
@@ -206,13 +209,10 @@ public class MainActivity extends AppCompatActivity {
                 .limit(5)
                 .collect(Collectors.toList()); */
 
-        List<Map.Entry<String, Integer>> topFiveWords = wordFrequencies.entrySet().stream()
-                .sorted((e1, e2) -> {
+        List<Map.Entry<String, Integer>> topFiveWords = wordFrequencies.entrySet().stream().sorted((e1, e2) -> {
                     int freqCompare = e2.getValue().compareTo(e1.getValue());
                     return (freqCompare != 0) ? freqCompare : e1.getKey().compareTo(e2.getKey());
-                })
-                .limit(5)
-                .collect(Collectors.toList());
+                }).limit(5).collect(Collectors.toList());
 
 
         // Build output
